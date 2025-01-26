@@ -1,0 +1,22 @@
+name = "urban-api"
+compatibility_date = "2024-11-11"
+main = "dist/index.js"
+
+[build]
+command = "bun build ./src/server.js --outfile=dist/index.js --bundle --format=cjs"
+watch_dir = "src"
+
+[vars]
+ENVIRONMENT = "production"
+
+[[routes]]
+pattern = "urban.xvh.lol"
+custom_domain = true
+
+[env.development]
+name = "urban-api-dev"
+vars = { ENVIRONMENT = "development" }
+
+[env.production]
+name = "urban-api-prod"
+vars = { ENVIRONMENT = "production" }

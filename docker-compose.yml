@@ -1,0 +1,11 @@
+services:
+  main:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: UrbanAPI
+    ports:
+      - "25241:8080"
+    restart: unless-stopped

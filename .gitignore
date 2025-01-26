@@ -1,5 +1,6 @@
-node_modules
+node_modules/
 todo.txt
 dist
 firebase-debug.log
 
+.env

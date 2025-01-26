@@ -7,8 +7,11 @@ const {
   authorController,
   dateController,
 } = require("../controllers");
+const apiKeyMiddleware = require("../middlewares/auth");
 
 function setupRoutes(app) {
+  app.use(apiKeyMiddleware);
+
   app.use("/api/search", searchController);
   app.use("/api/random", randomController);
   app.use("/api/browse", browseController);

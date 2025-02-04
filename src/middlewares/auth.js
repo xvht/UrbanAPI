@@ -10,7 +10,7 @@ const apiKeyMiddleware = (req, res, next) => {
     }
 
     [, apiKey] = apiKey.split(" ");
-    if (apiKey !== "bf8ce27b4c327db887bc33244279ca82e6cc2c51302486f9") {
+    if (apiKey !== process.env.API_KEY) {
       return res.status(401).json({
         error: true,
         code: 401,

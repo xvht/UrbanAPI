@@ -12,12 +12,13 @@ async function searchController(req, res, next) {
     multiPage = "false",
   } = req.query;
 
-  if (!term)
+  if (!term) {
     return res.status(400).json({
       error: true,
       code: 400,
       data: "Term query parameter is required",
     });
+  }
 
   const validationResult = validateQueryParams({
     term,
@@ -27,12 +28,13 @@ async function searchController(req, res, next) {
     page,
     multiPage,
   });
-  if (!validationResult.valid)
+  if (!validationResult.valid) {
     return res.status(400).json({
       error: true,
       code: 400,
       data: validationResult.message,
     });
+  }
 
   const response = await scraper("define.php", {
     term,
@@ -42,14 +44,17 @@ async function searchController(req, res, next) {
     page,
     multiPage,
   });
+
   if (response instanceof Error) return next(response);
-  if (response.data && !response.data.length)
+  if (response.data && !response.data.length) {
     return res.status(404).json({
       error: false,
       code: 404,
       data: response,
     });
-  res.status(200).json({
+  }
+
+  res.json({
     error: false,
     code: 200,
     data: response,
@@ -72,12 +77,13 @@ async function randomController(req, res, next) {
     page,
     multiPage,
   });
-  if (!validationResult.valid)
+  if (!validationResult.valid) {
     return res.status(400).json({
-      statusCode: 400,
-      error: "Bad request",
-      message: validationResult.message,
+      error: true,
+      code: 400,
+      data: validationResult.message,
     });
+  }
 
   const response = await scraper("random.php", {
     strict,
@@ -86,16 +92,20 @@ async function randomController(req, res, next) {
     page,
     multiPage,
   });
+
   if (response instanceof Error) return next(response);
-  if (response.data && !response.data.length)
+  if (response.data && !response.data.length) {
     return res.status(404).json({
-      statusCode: 404,
-      ...response,
-      message: "No definitions found for this word",
+      error: false,
+      code: 404,
+      data: response,
     });
-  res.status(200).json({
-    statusCode: 200,
-    ...response,
+  }
+
+  res.json({
+    error: false,
+    code: 200,
+    data: response,
   });
 }
 
@@ -109,12 +119,13 @@ async function browseController(req, res, next) {
     multiPage = "false",
   } = req.query;
 
-  if (!character)
+  if (!character) {
     return res.status(400).json({
-      statusCode: 400,
-      error: "Bad request",
-      message: "Character query parameter is required",
+      error: false,
+      code: 400,
+      data: "Character query parameter is required",
     });
+  }
 
   const validationResult = validateQueryParams({
     character,
@@ -124,11 +135,13 @@ async function browseController(req, res, next) {
     page,
     multiPage,
   });
-  if (!validationResult.valid)
+  if (!validationResult.valid) {
     return res.status(400).json({
-      error: "Bad request",
-      message: validationResult.message,
+      error: true,
+      code: 400,
+      data: validationResult.message,
     });
+  }
 
   const scrapeType = "browse";
   const path = character === "new" ? "yesterday.php" : "browse.php";
@@ -143,16 +156,20 @@ async function browseController(req, res, next) {
     page,
     multiPage,
   });
+
   if (response instanceof Error) return next(response);
-  if (response.data && !response.data.length)
+  if (response.data && !response.data.length) {
     return res.status(404).json({
-      statusCode: 404,
-      ...response,
-      message: "No words found for this character",
+      error: false,
+      code: 404,
+      data: response,
     });
-  res.status(200).json({
-    statusCode: 200,
-    ...response,
+  }
+
+  res.json({
+    error: false,
+    code: 200,
+    data: response,
   });
 }
 
@@ -166,11 +183,13 @@ async function authorController(req, res, next) {
     multiPage = "false",
   } = req.query;
 
-  if (!author)
+  if (!author) {
     return res.status(400).json({
-      error: "Bad request",
-      message: "Author query parameter is required",
+      error: true,
+      code: 400,
+      data: "Author query parameter is required",
     });
+  }
 
   const validationResult = validateQueryParams({
     author,
@@ -180,12 +199,13 @@ async function authorController(req, res, next) {
     page,
     multiPage,
   });
-  if (!validationResult.valid)
+  if (!validationResult.valid) {
     return res.status(400).json({
-      statusCode: 400,
-      error: "Bad request",
-      message: validationResult.message,
+      error: true,
+      code: 400,
+      data: validationResult.message,
     });
+  }
 
   const scrapeType = "author";
   const response = await scraper("author.php", {
@@ -197,16 +217,20 @@ async function authorController(req, res, next) {
     page,
     multiPage,
   });
+
   if (response instanceof Error) return next(response);
-  if (response.data && !response.data.length)
+  if (response.data && !response.data.length) {
     return res.status(404).json({
-      statusCode: 404,
-      ...response,
-      message: `No definitions by ${author}`,
+      error: false,
+      code: 404,
+      data: response,
     });
-  res.status(200).json({
-    statusCode: 200,
-    ...response,
+  }
+
+  res.json({
+    error: false,
+    code: 200,
+    data: response,
   });
 }
 
@@ -220,11 +244,13 @@ async function dateController(req, res, next) {
     multiPage = "false",
   } = req.query;
 
-  if (!date)
+  if (!date) {
     return res.status(400).json({
-      error: "Bad request",
-      message: "Date query parameter is required",
+      error: false,
+      code: 400,
+      data: "Date query parameter is required",
     });
+  }
 
   const validationResult = validateQueryParams({
     date,
@@ -234,12 +260,13 @@ async function dateController(req, res, next) {
     page,
     multiPage,
   });
-  if (!validationResult.valid)
+  if (!validationResult.valid) {
     return res.status(400).json({
-      statusCode: 400,
-      error: "Bad request",
-      message: validationResult.message,
+      error: true,
+      code: 400,
+      data: validationResult.message,
     });
+  }
 
   const scrapeType = "date";
   const response = await scraper("yesterday.php", {
@@ -251,16 +278,20 @@ async function dateController(req, res, next) {
     page,
     multiPage,
   });
+
   if (response instanceof Error) return next(response);
-  if (response.data && !response.data.length)
+  if (response.data && !response.data.length) {
     return res.status(404).json({
-      statusCode: 404,
-      ...response,
-      message: `No words found on ${date}`,
+      error: false,
+      code: 404,
+      data: response,
     });
-  res.status(200).json({
-    statusCode: 200,
-    ...response,
+  }
+
+  res.json({
+    error: false,
+    code: 200,
+    data: response,
   });
 }
 
